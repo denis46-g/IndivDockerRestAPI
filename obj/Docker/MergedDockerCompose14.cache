@@ -1,0 +1,50 @@
+name: dockercompose6015052326228433153
+services:
+  SqlServerDb:
+    container_name: postgres
+    environment:
+      POSTGRES_DB: my-rest-api
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      my-rest-api-dev: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+        volume: {}
+  myrestapi:
+    build:
+      context: C:\Users\Acer\Desktop\докер\MyRestAPI
+      dockerfile: MyRestAPI/Dockerfile
+    container_name: my-rest-api
+    depends_on:
+      SqlServerDb:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "80"
+    networks:
+      my-rest-api-dev: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        target: 80
+        protocol: tcp
+networks:
+  my-rest-api-dev:
+    name: dockercompose6015052326228433153_my-rest-api-dev
+    driver: bridge
+volumes:
+  postgres-data:
+    name: dockercompose6015052326228433153_postgres-data

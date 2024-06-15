@@ -1,0 +1,43 @@
+name: dockercompose6015052326228433153
+services:
+  SqlServerDb:
+    container_name: SqlServerContainer
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: myStong_Password123#
+    expose:
+      - "5432"
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8001"
+        protocol: tcp
+  myrestapi:
+    build:
+      context: C:\Users\Acer\Desktop\докер\MyRestAPI
+      dockerfile: MyRestAPI/Dockerfile
+    container_name: WebApiContainer
+    depends_on:
+      SqlServerDb:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "80"
+    image: myrestapi
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8001"
+        protocol: tcp
+      - mode: ingress
+        target: 80
+        protocol: tcp
+networks:
+  default:
+    name: dockercompose6015052326228433153_default

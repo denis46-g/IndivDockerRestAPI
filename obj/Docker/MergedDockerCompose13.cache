@@ -1,0 +1,40 @@
+name: dockercompose6015052326228433153
+services:
+  SqlServerDb:
+    container_name: postgres
+    environment:
+      POSTGRES_DB: my-rest-api
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+  myrestapi:
+    build:
+      context: C:\Users\Acer\Desktop\докер\MyRestAPI
+      dockerfile: MyRestAPI/Dockerfile
+    container_name: my-rest-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "80"
+    networks:
+      my-rest-api-dev: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        target: 80
+        protocol: tcp
+networks:
+  default:
+    name: dockercompose6015052326228433153_default
+  my-rest-api-dev:
+    name: dockercompose6015052326228433153_my-rest-api-dev
+    driver: bridge

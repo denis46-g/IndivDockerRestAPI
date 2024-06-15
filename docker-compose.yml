@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+    servproglab:
+        image: myrestapi:latest
+        build: .
+        ports:
+            - "5000:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+        volumes:
+            - ./Database:/app/Database
+    
+  
